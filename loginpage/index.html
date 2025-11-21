@@ -136,7 +136,7 @@
         .container.right-panel-active .overlay-container{ transform: translateX(-100%); }
         
         .overlay { 
-            background: #FF416C; /* ให้พื้นหลังหลักเป็นสีแดงทึบ */
+            background: #83112b; /* ให้พื้นหลังหลักเป็นสีแดงทึบ */
             background-repeat: no-repeat; 
             background-size: cover; 
             color: #FFFFFF; 
@@ -169,21 +169,15 @@
         .container.right-panel-active .overlay-left { transform: translateX(0); }
         .overlay-right { right: 0; transform: translateX(0); }
         .container.right-panel-active .overlay-right { transform: translateX(20%); }
-
-        /* ---------------------------------------------------- */
-        /* 🎨 สไตล์ลายไทย (Overlay Custom) */
-        /* ---------------------------------------------------- */
         .overlay-panel-custom {
             /* 🎨 สีแดงหลักและลายไทย (ใช้สีแดงสดจากภาพตัวอย่างของคุณ) */
             background-color: #FF416C; 
-           ในโปรเจกต์ของคุณ */
             background-image: url('Thai pattern.png'); 
             background-repeat: repeat; 
             background-size: 150px; /* ปรับขนาดให้เหมาะสม */
             color: #FFFFFF; 
         }
 
-        /* สร้างชั้นสีแดงโปร่งใสซ้อนทับเพื่อให้ลายไทยดูจางๆ และข้อความไม่จม */
         .overlay-panel-custom::before {
             content: '';
             position: absolute;
@@ -192,7 +186,7 @@
             width: 100%;
             height: 100%;
             /* 💡 ใช้สีแดงที่มีความโปร่งใส (Opacity 0.85) เพื่อให้ลายไทยที่พื้นหลังจางลง */
-            background-color: rgba(123, 22, 46, 0.85); 
+            background-color: rgba(133, 34, 57, 0.85); 
             z-index: -1; /* ให้มันอยู่ด้านหลังข้อความและปุ่ม */
         }
         /* ---------------------------------------------------- */
@@ -399,7 +393,7 @@
         signUpButton.addEventListener('click', () => { container.classList.add("right-panel-active"); });
         signInButton.addEventListener('click', () => { 
             container.classList.remove("right-panel-active"); 
-            showSubForm('signInForm'); // เมื่อกลับมา Sign In ให้แสดงฟอร์ม Sign In หลัก
+            showSubForm('signInForm'); 
         });
 
         // ฟังก์ชันสำหรับสลับฟอร์มย่อย
@@ -501,17 +495,15 @@
                 }
             }
 
-
             // 4. แสดง/ซ่อนผลลัพธ์
             if (isFieldValid) {
                 input.classList.remove('is-invalid');
                 errorElement.style.display = 'none';
             } else if (input.value.length > 0 || input.validity.valueMissing) {
                 input.classList.add('is-invalid');
-                errorElement.textContent = errorMessage || errorElement.textContent; // ใช้ข้อความที่สร้างขึ้นใหม่
+                errorElement.textContent = errorMessage || errorElement.textContent;
                 errorElement.style.display = 'block';
             } else {
-                 // ถ้าว่างเปล่า และไม่มี validity error อื่นๆ (เช่น tooShort/patternMismatch)
                 input.classList.remove('is-invalid');
                 errorElement.style.display = 'none';
             }
@@ -522,21 +514,19 @@
         // --- Event Listeners สำหรับ Validation Real-time ---
         const allFormInputs = document.querySelectorAll('input');
         allFormInputs.forEach(input => {
-            // เมื่อคลิกเข้าช่อง/ออกช่อง ให้ซ่อน/แสดง error
             input.addEventListener('focus', () => {
                 input.classList.remove('is-invalid');
                 const errorElement = getErrorElement(input);
                 if (errorElement) errorElement.style.display = 'none';
             });
             input.addEventListener('blur', () => { 
-                // ยกเว้น OTP input ไม่ต้อง validate บน blur
                 if (!input.classList.contains('otp-input')) {
                     validateField(input); 
                 }
             });
         });
 
-        // --- OTP Input Navigation (เลื่อน Focus) ---
+        // --- OTP Input Navigation ---
         const otpInputs = document.querySelectorAll('.otp-input');
         otpInputs.forEach((input, index) => {
             input.addEventListener('input', (e) => {
@@ -571,35 +561,25 @@
                 if (firstInvalid) firstInvalid.focus();
             } else {
                 alert('🎉 ลงทะเบียนสำเร็จ!');
-                // ในชีวิตจริง: ส่งข้อมูลไปเซิร์ฟเวอร์
+                // ส่งข้อมูลไปเซิร์ฟเวอร์
             }
         });
 
-        // 2. Forgot Email Submit (จำลองการตรวจสอบอีเมลและส่ง OTP)
+        // 2. Forgot Email Submit
         const forgotEmailForm = document.getElementById('forgotEmailForm');
         forgotEmailForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const emailInput = document.getElementById('fp-email');
-            const errorElement = getErrorElement(emailInput);
             
-            // ตรวจสอบความถูกต้องของรูปแบบอีเมลก่อน
             if (validateField(emailInput)) {
-                
                 const userEmail = emailInput.value;
                 document.getElementById('otp-email-display').textContent = userEmail;
-                
-                // แจ้งรหัส OTP จำลองให้ผู้ใช้ทราบ
                 alert(`จำลอง: ส่ง OTP ไปที่ ${userEmail} (OTP ที่ถูกต้องคือ 123456)`);
-                
-                // ไปยังหน้า OTP ทันที
                 showSubForm('otpForm');
-
-            } else {
-                 // หากรูปแบบอีเมลไม่ถูกต้อง จะแสดง error จาก validateField
             }
         });
 
-        // 3. OTP Submit (จำลองการยืนยัน OTP)
+        // 3. OTP Submit
         const otpForm = document.getElementById('otpForm');
         otpForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -614,15 +594,14 @@
             }
             otpErrorElement.style.display = 'none';
 
-            // *** จำลอง: ตรวจสอบ OTP ***
-            if (otpValue === '123456') { // OTP จำลอง
+            if (otpValue === '123456') {
                 alert('OTP ถูกต้อง! กรุณาตั้งรหัสผ่านใหม่');
                 showSubForm('resetPasswordForm');
             } else {
                 otpErrorElement.textContent = 'รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
                 otpErrorElement.style.display = 'block';
                 otpInputs[0].focus();
-                otpInputs.forEach(input => input.value = ''); // เคลียร์ OTP
+                otpInputs.forEach(input => input.value = '');
             }
         });
         
@@ -640,14 +619,13 @@
             if (formValid) {
                 alert('เปลี่ยนรหัสผ่านสำเร็จ! กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่');
                 showSubForm('signInForm');
-                // ในชีวิตจริง: ส่งรหัสผ่านใหม่ไปเซิร์ฟเวอร์
             } else {
                 const firstInvalid = resetPasswordForm.querySelector('.is-invalid');
                 if (firstInvalid) firstInvalid.focus();
             }
         });
         
-        // 5. Sign In Submit (เพิ่ม Validation)
+        // 5. Sign In Submit (เชื่อมหน้าอยู่ที่นี่ ✅)
         const signInForm = document.getElementById('signInForm');
         signInForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -660,10 +638,15 @@
 
             if (formValid) {
                 // *** จำลองการตรวจสอบสิทธิ์ ***
-                const isAuth = siEmail.value === 'test@test.com' && siPassword.value === 'password123';
+                // (ถ้าอยากให้กดปุ่มแล้วไปเลยโดยไม่ต้องกรอก test/pass ให้แก้เป็น if(true) { ... } )
+                const isAuth = siEmail.value === 'test@test.com' && siPassword.value === '12345678';
                 
                 if (isAuth) {
-                    alert('เข้าสู่ระบบสำเร็จ!');
+                    // alert('เข้าสู่ระบบสำเร็จ!'); 
+                    
+                    // ⭐ เชื่อมไปหน้าลงทะเบียนที่นี่ ⭐
+                    window.location.href = 'submission.html'; 
+
                 } else {
                     alert('เข้าสู่ระบบไม่สำเร็จ: อีเมลหรือรหัสผ่านไม่ถูกต้อง');
                     siPassword.classList.add('is-invalid');
@@ -675,7 +658,6 @@
                 if (firstInvalid) firstInvalid.focus();
             }
         });
-        
     </script>
 </body>
 </html>

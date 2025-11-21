@@ -49,8 +49,8 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF4B2B;
-	background-color: #FF4B2B;
+	border: 1px solid #c49a67;
+	background-color: #c49a67;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -220,8 +220,8 @@ input {
 .overlay-panel-custom {
     background-image: url(Thai pattern.png);
     background-repeat: repeat;
-    background-size: 140px;
-    background-position: center;
+    background-size: 60px;
+    background-position: 10px center;
     color: #FFFFFF;
 }
 
@@ -288,7 +288,7 @@ input {
 .password-field input { padding-right: 40px; margin: 0; }
 .password-toggle { 
     position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
-    color: #333; cursor: pointer; font-size: 1rem; z-index: 10; 
+    color: #999999; cursor: pointer; font-size: 1rem; z-index: 10; 
 }
 
 /* 3. Validation Styling */
