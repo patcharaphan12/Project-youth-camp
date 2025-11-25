@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียนผลงาน - Youth Camp</title>
+    <meta name="description" content="กรอกรายละเอียดตำแหน่งเพื่อยืนยันการลงทะเบียนผลงานของคุณ - แข่งขันวิดีโอยุวชน">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            background-image: none;
+        }
+
+        /* Background image ด้านหลังสุด */
+        .background-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            /* ปรับสูงตามต้องการ */
+            background-image: url('https://web4all.senate.go.th/assets/theme/main_web4all/files/images/bg1.webp');
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+        }
+
+        /* Sticky header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 2rem 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sticky-header h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #b91c1c;
+        }
+
+        /* Page header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #393f57;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: #666;
+        }
+
+        /* Grid layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1.5fr 1fr;
+            }
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #b91c1c;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .word-count {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .word-count span {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Upload area */
+        .upload-area {
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .upload-area:hover {
+            border-color: #b91c1c;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            color: #999;
+        }
+
+        .upload-text {
+            color: #b91c1c;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 1.050rem;
+        }
+
+        .upload-hint {
+            font-size: 1.050rem;
+            color: #666;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #b91c1c 0%, #e89c7d 100%);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(217, 119, 87, 0.3);
+        }
+
+        /* Preview */
+        .preview-card {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .preview-card h2 {
+            text-align: center;
+        }
+
+        .preview-container {
+            width: 100%;
+            max-width: 360px;
+            aspect-ratio: 9/16;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem auto 0;
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 10000;
+            min-width: 300px;
+            min-height: 150px;
+            text-align: center;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .toast.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .toast.success {
+            border-left: 25px solid #4caf50;
+        }
+
+        .toast.error {
+            border-left: 20px solid #dc3545;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .toast-description {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        @media (max-width: 640px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sticky header -->
+    <header class="sticky-header"></header>
+
+    <!-- Background image ด้านหลังสุด -->
+    <div class="background-bottom"></div>
+
+    <div class="container">
+        <!-- Page header -->
+        <div class="page-header">
+            <h1>ลงทะเบียนผลงาน</h1>
+            <p>กรอกรายละเอียดตำแหน่งเพื่อยืนยันการลงทะเบียนผลงานของคุณ</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Form Section -->
+            <div class="card">
+                <h2>รายละเอียดการส่ง</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="videoTitle">ชื่อวิดีโอ</label>
+                        <input type="text" id="videoTitle" name="videoTitle" placeholder="ป่าไม้ที่หายไป" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="theme">ธีมหัวข้อ</label>
+                        <input type="text" id="theme" name="theme" placeholder="สิ่งแวดล้อม (Planet)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="word-count">
+                            <label for="description">รายละเอียด</label>
+                            <span id="wordCount">0/100 words</span>
+                        </div>
+                        <textarea id="description" name="description"
+                            placeholder="(จำนวนไม่เกิน 100 คำ) ป่าไม้เป็นสิ่งที่อยู่คู่กับสังคมไทยมาอย่างช้านาน..."
+                            required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="teamName">ชื่อทีมผู้จัดทำ</label>
+                            <input type="text" id="teamName" name="teamName" placeholder="ทีมป่าไม้ของฉัน" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tiktokLink">ลิงค์ TikTok</label>
+                            <input type="url" id="tiktokLink" name="tiktokLink"
+                                placeholder="https://www.tiktok.com/@username" required
+                                pattern="https?:\/\/(www\.)?tiktok\.com\/.*"
+                                title="กรุณากรอกลิงก์ TikTok ที่ถูกต้อง เช่น https://www.tiktok.com/@username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ภาพปก</label>
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="coverImage" name="coverImage" accept="image/*"
+                                style="display: none;">
+                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="upload-text">อัปโหลดไฟล์ หรือลากเอกสารลงวาง</p>
+                            <p class="upload-hint">จำกัดขนาดของ 1080x1920 พิกเซล JPG หรือ PNG</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">ยืนยันการลงทะเบียน</button>
+                </form>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-card">
+                <h2>ดูตัวอย่างรูปปก</h2>
+                <div class="preview-container">
+                    <img id="previewImage"
+                        src="https://images.workpointtoday.com/workpointnews/2019/06/24071958/1561335594_97347_1.webp"
+                        alt="Preview">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-title" id="toastTitle"></div>
+        <div class="toast-description" id="toastDescription"></div>
+    </div>
+
+    <script>
+        // Word count
+        const textarea = document.getElementById("description");
+        const wordCountDisplay = document.getElementById("wordCount");
+        const segmenter = new Intl.Segmenter("th", { granularity: "word" });
+
+        function countThaiWords(text) {
+            const segments = [...segmenter.segment(text)].filter(seg => seg.isWordLike);
+            return segments.length;
+        }
+
+        textarea.addEventListener("input", () => {
+            let text = textarea.value;
+            let words = countThaiWords(text);
+
+            if (words > 100) {
+                const segments = [...segmenter.segment(text)].filter(seg => seg.isWordLike);
+                const allowed = segments.slice(0, 100).map(seg => seg.segment).join("");
+                textarea.value = allowed;
+                words = 100;
+            }
+
+            wordCountDisplay.textContent = `${words}/100 words`;
+        });
+
+        // Image upload
+        const coverImageInput = document.getElementById('coverImage');
+        const uploadArea = document.getElementById('uploadArea');
+        const previewImage = document.getElementById('previewImage');
+
+        uploadArea.addEventListener('click', () => coverImageInput.click());
+
+        coverImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('ไฟล์ใหญ่เกินไป', 'กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 10MB', 'error');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = () => previewImage.src = reader.result;
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#4a9d6f';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#e0e0e0';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#e0e0e0';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                coverImageInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                coverImageInput.dispatchEvent(event);
+            }
+        });
+
+        // Toast
+        function showToast(title, description, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDescription = document.getElementById('toastDescription');
+
+            toastTitle.textContent = title;
+            toastDescription.textContent = description;
+
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Form submission
+        const registerForm = document.getElementById('registerForm');
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!coverImageInput.files[0]) {
+                showToast('กรุณาอัปโหลดภาพปก', 'คุณต้องอัปโหลดภาพปกก่อนยืนยันการลงทะเบียน', 'error');
+                return;
+            }
+
+            const formData = {
+                videoTitle: document.getElementById('videoTitle').value,
+                theme: document.getElementById('theme').value,
+                description: document.getElementById('description').value,
+                teamName: document.getElementById('teamName').value,
+                tiktokLink: document.getElementById('tiktokLink').value,
+                coverImage: coverImageInput.files[0]
+            };
+
+            console.log('Form submitted:', formData);
+            showToast('ลงทะเบียนสำเร็จ', 'ขอบคุณที่ส่งผลงานเข้าร่วมการแข่งขัน', 'success');
+        });
+    </script>
+</body>
+
+</html>
