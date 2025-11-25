@@ -4,73 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียนผลงาน</title>
+    <title>ลงทะเบียนผลงาน - Youth Camp</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        /* 1. Global & Variables (Based on Tailwind/React Structure) */
-        :root {
-            /* สีหลัก (Primary/Accent) */
-            --color-primary-base: #c49a67;
-            /* Gold/Brown */
-            --color-primary-dark: #b38b5a;
-            --color-card-bg: #FFFFFF;
-            --color-input-bg: #f5f5f5;
-            --color-border: #eee;
-            --color-background: #f8f8f8;
-            --color-muted-foreground: #6b7280;
-        }
-
+        /* 3. Global Styles (เหมือนหน้า Login เป๊ะ) */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Kanit', sans-serif;
+            font-family: 'Montserrat', 'Kanit', sans-serif;
         }
 
-        /* ===== General Layout & Body ===== */
         body {
-            background: var(--color-background);
+            background: #f6f5f7;
+            /* พื้นหลังสีเทาอ่อน */
             color: #333;
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 3rem 1rem;
-            padding-top: 3rem;
-            /* เผื่อพื้นที่ Navbar (ถ้าเปิดใช้งาน) */
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-
+            flex-direction: column;
         }
 
-
-        .main-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Page Header - ใช้ Gradient Text (CSS Hack) */
+        /* Page Header */
         .page-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 1.2rem;
+            margin-top: 1rem;
         }
 
         .page-header h1 {
             font-weight: 800;
-            font-size: 2.5rem;
-
+            font-size: 2rem;
             background: linear-gradient(180deg, #c49a67, #7d2b3e);
             background-size: 100% 300%;
             animation: gradientMove 5s ease-in-out infinite;
-
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-
-            margin-bottom: 0.5rem;
             letter-spacing: 1px;
         }
 
@@ -90,103 +70,98 @@
 
 
         .page-header p {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--color-muted-foreground);
+            font-size: 14px;
+            font-weight: 100;
+            letter-spacing: 0.5px;
+            color: #666;
         }
 
-        /* Grid Layout */
+        /* Container & Card (เหมือนหน้า Login) */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            /* กว้างกว่า Login หน่อยเพราะเนื้อหาเยอะ */
+            background: #FFFFFF;
+            border-radius: 20px;
+            /* ความโค้ง 20px */
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+                0 10px 10px rgba(0, 0, 0, 0.22);
+            /* เงาเดียวกัน */
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            margin-top: 3rem;
+        }
+
+        h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* --- Form Elements (Input เหมือนหน้า Login) --- */
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            text-align: left;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background-color: #eee;
+            /* สีพื้น Input แบบเดียวกับ Login */
+            border: none;
+            /* ไม่มีขอบ */
+            padding: 12px 15px;
+            margin: 5px 0;
+            width: 100%;
+            font-size: 14px;
+            border-radius: 8px;
+            /* ความมน */
+            transition: all 0.3s ease;
+        }
+
+        /* Focus State: เส้นใต้สีทอง */
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background-color: #e8e8e8;
+            box-shadow: 0 2px 0 #c49a67;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Layout Grid */
         .content-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 3rem;
         }
 
-        @media (min-width: 1024px) {
+        @media (min-width: 768px) {
             .content-grid {
-                grid-template-columns: 1.9fr 1fr;
+                grid-template-columns: 1.5fr 1fr;
+                /* แบ่งซ้ายขวา */
             }
         }
-
-        /* Card Style - ขอบมน, เงาอ่อน */
-        .card {
-            background: var(--color-card-bg);
-            border-radius: 24px;
-            /* มนมากขึ้น */
-            padding: 40px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            /* เงาอ่อนลง */
-            border: 1px solid var(--color-border);
-            position: relative;
-        }
-
-        .card h2 {
-            font-weight: 700;
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            text-align: left;
-            /* Mimicking bg-clip-text */
-            background: #333;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            /* เพิ่มบรรทัดนี้: */
-            background-clip: text;
-        }
-
-        /* --- Form Elements --- */
-        .form-group {
-            margin-bottom: 1.5rem;
-            width: 100%;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            background-color: var(--color-input-bg);
-            border: 2px solid var(--color-border);
-            padding: 10px 15px;
-            width: 100%;
-            font-size: 14px;
-            border-radius: 12px;
-            /* มนมากขึ้น */
-            height: 48px;
-            /* ความสูง Input ตาม React Component */
-            transition: all 0.3s ease;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-            height: auto;
-        }
-
-        /* Focus & Hover Style (Mimicking focus:border-primary) */
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            background-color: var(--color-card-bg);
-            box-shadow: 0 0 0 1px var(--color-primary-base);
-        }
-
-
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 640px) {
-            .form-row {
-                grid-template-columns: 1fr 1fr;
-            }
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         /* Word Count */
@@ -194,70 +169,189 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
         }
 
         .word-count span {
             font-size: 12px;
-            font-weight: 500;
-            color: var(--color-muted-foreground);
-            transition: color 0.3s;
+            color: #888;
         }
 
-        /* --- Upload Area (เน้นลูกเล่นขยับ) --- */
-        .upload-area {
-            border: 2px dashed var(--color-border);
-            background-color: var(--color-input-bg);
-            border-radius: 24px;
-            padding: 30px;
+        .new-upload {
+            border: 2px dashed #ddd;
+            border-radius: 22px;
+            padding: 28px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease, box-shadow 0.3s ease;
+            transition: 0.3s;
+            background: #f7f7f7;
             position: relative;
         }
 
-        .upload-area.highlight {
-            border-color: var(--color-primary-base);
-            box-shadow: 0 0 20px rgba(196, 154, 103, 0.5);
-            background: linear-gradient(180deg, rgba(196, 154, 103, 0.1), rgba(196, 154, 103, 0.05));
-        }
-
-
-        /* Animation: whileHover={{ scale: 1.01 }} */
-        .upload-area:hover {
-            border-color: var(--color-primary-base);
-            background-color: var(--color-card-bg);
-            transform: scale(1.01);
-        }
-
-        /* Animation: Dragging State (isDragging) */
-        .upload-area.drag-over {
-            border-color: var(--color-primary-base);
-            background-color: var(--color-primary-base) !important;
-            /* Simulate bg-primary/5 */
-            background-color: rgba(196, 154, 103, 0.05);
+        .new-upload:hover {
+            border-color: #c49a67;
+            background: #fff;
             transform: scale(1.01);
         }
 
         .upload-icon-wrapper {
             width: 64px;
             height: 64px;
-            margin: 0 auto 16px;
+            margin: 0 auto 12px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            /* กราเดียนต์ที่ต้องการ */
             background: linear-gradient(180deg, #c49a67, #7d2b3e);
-
-            /* ทำให้ไหล */
-            background-size: 150% 150%;
-            animation:
-                gradientMove 4s ease-in-out infinite,
-                bounce-y 2s ease-in-out infinite;
+            background-size: 100% 300%;
+            /* จำเป็นสำหรับ gradientMove */
+            animation: gradientMove 4s ease-in-out infinite, bounce 2s infinite;
         }
 
+        .upload-icon {
+            width: 28px;
+            height: 28px;
+            color: #fff;
+        }
+
+        .upload-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .preview-wrapper {
+            position: relative;
+        }
+
+        .preview-image {
+            width: 100%;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .preview-wrapper:hover .remove-btn {
+            opacity: 1;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Preview Card */
+        .preview-card-wrapper {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            /* ทำให้ดูกลืนไปกับ container หลัก หรือจะแยกก็ได้ */
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+            aspect-ratio: 9/16;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-placeholder {
+            position: absolute;
+            z-index: 5;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Submit Button (เหมือนหน้า Login เป๊ะ) */
+        .submit-btn {
+            border-radius: 20px;
+            border: 1px solid #c49a67;
+            background-color: #c49a67;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(196, 154, 103, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+
+        .submit-btn:hover {
+            background-color: #b38b5a;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .preview-placeholder svg {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            color: #fff;
+            /* ไอคอนเป็นสีขาว */
+            padding: 14px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #c49a67, #7d2b3e);
+            background-size: 100% 300%;
+            animation: gradientMove 4s ease-in-out infinite;
+        }
+
+        /* keyframes ให้ gradient เคลื่อนที่ขึ้นลง */
         @keyframes gradientMove {
             0% {
                 background-position: 50% 0%;
@@ -272,138 +366,6 @@
             }
         }
 
-
-        @keyframes bounce-y {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .upload-icon {
-            width: 28px;
-            height: 28px;
-            color: #FFFFFF;
-            /* text-primary-foreground */
-        }
-
-        .upload-text {
-            font-weight: 500;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .upload-hint {
-            font-size: 13px;
-            color: var(--color-muted-foreground);
-            margin-top: 5px;
-        }
-
-        /* Submit Button (เน้นลูกเล่นขยับ/สี) */
-        .submit-btn-wrapper {
-            margin-top: 30px;
-            transition: transform 0.2s ease-out;
-            /* whileHover/whileTap */
-        }
-
-        .submit-btn-wrapper:hover {
-            transform: scale(1.01);
-        }
-
-        .submit-btn-wrapper:active {
-            transform: scale(0.99);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px 45px;
-            font-size: 16px;
-            font-weight: 500;
-            border: none;
-            border-radius: 20px;
-            /* มนมากขึ้น */
-            color: #FFFFFF;
-            cursor: pointer;
-            /* Mimicking bg-gradient-primary */
-            background: linear-gradient(90deg, var(--color-primary-base) 0%, var(--color-primary-dark) 100%);
-            transition: opacity 0.3s, box-shadow 0.3s;
-            box-shadow: 0 8px 15px rgba(196, 154, 103, 0.4);
-            /* shadow-glow */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.9;
-        }
-
-        .submit-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(196, 154, 103, 0.5);
-        }
-
-        /* Icon Animation: group-hover:translate-x-1 */
-        .submit-btn:hover .send-icon {
-            transform: translateX(3px);
-        }
-
-        .send-icon {
-            transition: transform 0.3s;
-        }
-
-        /* --- Preview Card (Sticky) --- */
-        .preview-card-wrapper {
-            position: sticky;
-            top: 6rem;
-            /* sticky top-24 */
-            height: fit-content;
-        }
-
-        .preview-card {
-            background: var(--color-card-bg);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--color-border);
-            text-align: center;
-        }
-
-        .preview-container {
-            position: relative;
-            margin: 20px auto 0;
-            width: 100%;
-            max-width: 280px;
-            aspect-ratio: 9/16;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #f0f0f0;
-            /* bg-muted */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            /* whileHover */
-        }
-
-        .preview-container:hover {
-            transform: scale(1.02);
-        }
-
-        .preview-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
         .preview-placeholder {
             text-align: center;
             padding: 1rem;
@@ -416,237 +378,21 @@
             justify-content: center;
             align-items: center;
         }
-
-        .preview-placeholder svg {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 10px;
-            color: var(--color-primary-base);
-            background: rgba(196, 154, 103, 0.2);
-            padding: 14px;
-            border-radius: 50%;
-        }
-
-        .preview-hint {
-            margin-top: 20px;
-            font-size: 12px;
-            color: var(--color-muted-foreground);
-        }
-
-        /* --- Toast/Modal (SuccessModal Logic) --- */
-        .success-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 500;
-            display: none;
-            /* Controlled by JS */
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .success-modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .success-modal-content {
-            background: var(--color-card-bg);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 450px;
-            margin: 1rem;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--color-border);
-            text-align: center;
-            transform: scale(0.8) translateY(50px);
-            opacity: 0;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
-            /* Spring-like transition */
-        }
-
-        .success-modal-overlay.show .success-modal-content {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        .modal-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary-base));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform: scale(0);
-            /* Initial scale for spring animation */
-        }
-
-        .success-modal-overlay.show .modal-icon-wrapper {
-            /* Simulating spring animation using keyframes/delay (approximate) */
-            animation: spring-scale 0.5s 0.2s forwards;
-        }
-
-        @keyframes spring-scale {
-            0% {
-                transform: scale(0);
-            }
-
-            70% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            background-color: #e8e8e8;
-            /* เพิ่มเส้นใต้สีทองเวลา Focus เพื่อความสวยงาม */
-            box-shadow: 0 2px 0 #c49a67;
-        }
-
-        .modal-icon {
-            color: #FFFFFF;
-            width: 40px;
-            height: 40px;
-        }
-
-        .modal-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary-base));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            /* เพิ่มบรรทัดนี้: */
-            background-clip: text;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s 0.3s, transform 0.3s 0.3s;
-        }
-
-        .success-modal-overlay.show .modal-title {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .modal-description {
-            color: var(--color-muted-foreground);
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s 0.4s, transform 0.3s 0.4s;
-        }
-
-        .success-modal-overlay.show .modal-description {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Success Modal (สีทอง) */
-        /* Success Modal (สีทอง) */
-        .success-modal-overlay .success-modal-content {
-            background: #fff;
-            border: 2px solid var(--color-primary-base);
-            /* ขอบทอง */
-        }
-
-        .success-modal-overlay .modal-icon-wrapper {
-            background: linear-gradient(45deg, var(--color-primary-dark), var(--color-primary-base));
-            color: #fff;
-        }
-
-        /* Warning Modal - Title แดง, Description เทา/ขาว */
-        #uploadWarningModal .success-modal-content {
-            background-color: #fff;
-            /* พื้นหลังขาว */
-            border: 2px solid #dc3545;
-            /* ขอบแดงเข้ม */
-        }
-
-        #uploadWarningModal .modal-icon-wrapper {
-            background: #dc3545;
-            /* ไอคอนแดง */
-            color: #fff;
-        }
-
-        #uploadWarningModal .modal-title {
-            background: none !important;
-            /* ลบ gradient */
-            -webkit-background-clip: unset !important;
-            background-clip: unset !important;
-            /* เพิ่มบรรทัดนี้ */
-            -webkit-text-fill-color: unset !important;
-            color: #dc3545 !important;
-            /* ข้อความหลักสีแดง */
-        }
-
-
-        #uploadWarningModal .modal-description {
-            color: var(--color-muted-foreground);
-            /* ข้อความรายละเอียดสีเทาเหมือน success modal */
-            font-size: 1rem;
-        }
     </style>
-</head>
-
-<body>
-    <header class="navbar">
-    </header>
-
-    <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div class="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-primary/10 blur-3xl"
-            style="background-color: rgba(196, 154, 103, 0.1); filter: blur(48px); animation: float1 8s infinite ease-in-out;">
-        </div>
-        <div class="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-accent/10 blur-3xl"
-            style="background-color: rgba(235, 235, 235, 0.1); filter: blur(48px); animation: float2 10s infinite ease-in-out;">
-        </div>
-    </div>
-
-    <style>
-        @keyframes float1 {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(-20px, 30px) scale(1.1);
-            }
-        }
-
-        @keyframes float2 {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(30px, -40px) scale(1.15);
-            }
-        }
-    </style>
-    <div class="main-container">
+    <header>
         <div class="page-header">
             <h1>ลงทะเบียนผลงาน</h1>
-            <p>กรอกรายละเอียดเพื่อส่งผลงานเข้าร่วมการแข่งขัน</p>
+            <p>กรอกรายละเอียดเพื่อส่งผลงานเข้าร่วม Project Youth Camp</p>
         </div>
+    </header>
 
+<body>
+    <div class="main-container">
         <div class="content-grid">
-            <div class="card">
+
+            <div>
                 <h2>รายละเอียดการส่ง</h2>
-                <form id="registerForm" class="space-y-6">
+                <form id="registerForm">
                     <div class="form-group">
                         <label for="videoTitle">ชื่อวิดีโอ</label>
                         <input type="text" id="videoTitle" name="videoTitle" placeholder="เช่น ป่าไม้ที่หายไป" required>
@@ -659,7 +405,7 @@
 
                     <div class="form-group">
                         <div class="word-count">
-                            <label for="description">รายละเอียด</label>
+                            <label for="description">รายละเอียด (Synopsis)</label>
                             <span id="wordCount">0/100 คำ</span>
                         </div>
                         <textarea id="description" name="description"
@@ -679,12 +425,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label>ภาพปกผลงาน</label>
-                        <div class="upload-area" id="uploadArea">
+                        <label>ภาพปกผลงาน (Cover)</label>
+                        <div class="upload-area new-upload" id="uploadArea">
                             <input type="file" id="coverImage" name="coverImage" accept="image/jpeg, image/png"
                                 style="display: none;">
 
-                            <div id="uploadPlaceholder" class="space-y-4">
+                            <div id="uploadPlaceholder" class="upload-placeholder">
                                 <div class="upload-icon-wrapper">
                                     <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -692,40 +438,19 @@
                                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
                                 </div>
-                                <div>
-                                    <p class="upload-text">คลิกเพื่ออัปโหลด หรือลากไฟล์มาวางที่นี่</p>
-                                    <p class="upload-hint">ขนาดแนะนำ 1080x1920 px (JPG/PNG) ไม่เกิน 10MB</p>
-                                </div>
+                                <p class="upload-text">คลิกเพื่ออัปโหลด หรือลากไฟล์มาวางที่นี่</p>
+                                <p class="upload-hint">ขนาดแนะนำ 1080x1920 px (JPG/PNG) ไม่เกิน 10MB</p>
                             </div>
 
-                            <div id="uploadImagePreview" style="display: none;">
-                                <img id="uploadedImage" src="" alt="Uploaded Preview"
-                                    class="max-h-48 mx-auto rounded-lg object-cover">
-                                <button type="button" id="removeImageBtn"
-                                    class="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full opacity-0 transition-opacity"
-                                    style="position: absolute; top: 8px; right: 8px; background: #dc3545; color: white; border-radius: 50%; border: none; padding: 6px; cursor: pointer; transition: opacity 0.3s; opacity: 0;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </button>
+                            <div id="uploadPreviewWrapper" class="preview-wrapper" style="display:none;">
+                                <img id="uploadedPreview" src="" class="preview-image">
+                                <button type="button" id="removeImageBtn" class="remove-btn">×</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="submit-btn-wrapper" id="submitBtnWrapper">
-                        <button type="submit" class="submit-btn">
-                            ยืนยันการลงทะเบียน
-                            <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="22" y1="2" x2="11" y2="13"></line>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                            </svg>
-                        </button>
-                    </div>
+
+                    <button type="submit" class="submit-btn">ยืนยันการลงทะเบียน</button>
                 </form>
             </div>
 
@@ -743,82 +468,29 @@
                             <span>ตัวอย่างภาพปก</span>
                         </div>
 
-                        <img id="previewImage" src="" alt="Preview">
+                        <img id="previewImage" src="" alt="Preview" style="display:none;">
                     </div>
-
-                    <p class="preview-hint">ตัวอย่างการแสดงผลเมื่ออยู่บนแพลตฟอร์ม</p>
                 </div>
             </div>
+
         </div>
     </div>
-
-    <div id="successModalOverlay" class="success-modal-overlay">
-        <div class="success-modal-content">
-            <div class="modal-icon-wrapper" id="modalIconWrapper">
-                <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="9 11 12 14 22 4"></polyline>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-                </svg>
-            </div>
-
-            <h2 class="modal-title">ลงทะเบียนสำเร็จ!</h2>
-            <p class="modal-description">ระบบได้รับข้อมูลเรียบร้อยแล้ว ขอบคุณที่ส่งผลงานเข้าร่วมการแข่งขัน</p>
-        </div>
-    </div>
-
-    <div id="uploadWarningModal" class="success-modal-overlay">
-        <div class="success-modal-content">
-            <div class="modal-icon-wrapper">
-                <svg class="modal-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </div>
-            <h2 class="modal-title" id="uploadWarningTitle">แจ้งเตือน</h2>
-            <p class="modal-description" id="uploadWarningMessage">กรุณาอัปโหลดรูปภาพ</p>
-        </div>
-    </div>
-
-
-    <!-- Warning Modal -->
-
 
     <script>
+        // ------------------------------------------
+        // 1. Logic Word Count
+        // ------------------------------------------
         const textarea = document.getElementById("description");
         const wordCountDisplay = document.getElementById("wordCount");
-        const coverImageInput = document.getElementById('coverImage');
-        const uploadArea = document.getElementById('uploadArea');
-        const previewImage = document.getElementById('previewImage');
-        const previewPlaceholder = document.getElementById('previewPlaceholder');
-        const uploadedImage = document.getElementById('uploadedImage');
-        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-        const uploadImagePreview = document.getElementById('uploadImagePreview');
-        const removeImageBtn = document.getElementById('removeImageBtn');
-        const successModalOverlay = document.getElementById('successModalOverlay');
-        const modalIconWrapper = document.getElementById('modalIconWrapper');
-        const uploadWarningModal = document.getElementById('uploadWarningModal');
-        const uploadWarningTitle = document.getElementById('uploadWarningTitle');
-        const uploadWarningMessage = document.getElementById('uploadWarningMessage');
-
-        let coverFile = null;
-
-        // --- 1. Word Count (Thai Language Support) ---
         let segmenter;
-        try {
-            segmenter = new Intl.Segmenter("th", { granularity: "word" });
-        } catch (e) {
-            segmenter = null;
-        }
+        try { segmenter = new Intl.Segmenter("th", { granularity: "word" }); } catch (e) { segmenter = null; }
 
         function countThaiWords(text) {
             if (segmenter) {
                 const segments = [...segmenter.segment(text)].filter(seg => seg.isWordLike);
                 return segments.length;
             } else {
-                const cleanedText = text.replace(/[\n\r\t]/g, ' ').trim();
-                return cleanedText === "" ? 0 : cleanedText.split(/\s+/).length;
+                return text.trim().split(/\s+/).length;
             }
         }
 
@@ -826,146 +498,91 @@
             let text = textarea.value;
             let words = countThaiWords(text);
             wordCountDisplay.textContent = `${words}/100 คำ`;
-            wordCountDisplay.style.color = words > 100 ? "#dc3545" : "var(--color-muted-foreground)";
+            if (words > 100) wordCountDisplay.style.color = "#b91c1c";
+            else wordCountDisplay.style.color = "#888";
         });
 
-        // --- 2. Warning Modal ---
-        function showUploadWarning(title, message) {
-            uploadWarningTitle.textContent = title;
-            uploadWarningMessage.textContent = message;
-            uploadWarningModal.style.display = 'flex';
+        // ------------------------------------------
+        // 2. Logic Image Upload
+        // ------------------------------------------
+        const coverImageInput = document.getElementById('coverImage');
+        const uploadArea = document.getElementById('uploadArea');
+        const previewImage = document.getElementById('previewImage');
 
-            // Animation
-            const wrapper = uploadWarningModal.querySelector('.modal-icon-wrapper');
-            wrapper.style.transform = 'scale(0)';
-            void wrapper.offsetWidth;
-            wrapper.style.animation = 'spring-scale 0.5s 0.2s forwards';
-
-            setTimeout(() => uploadWarningModal.classList.add('show'), 50);
-
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                uploadWarningModal.classList.remove('show');
-                setTimeout(() => { uploadWarningModal.style.display = 'none'; }, 300);
-            }, 3000);
-        }
-
-        uploadWarningModal.addEventListener('click', (e) => {
-            if (e.target === uploadWarningModal) {
-                uploadWarningModal.classList.remove('show');
-                setTimeout(() => { uploadWarningModal.style.display = 'none'; }, 300);
-            }
-        });
-
-        // --- 3. Image Upload/Preview/Drag&Drop ---
-        function handleFileChange(file) {
-            uploadArea.classList.remove('highlight');
-
-            if (!file) {
-                coverFile = null;
-                previewImage.style.display = 'none';
-                previewPlaceholder.style.display = 'block';
-                uploadPlaceholder.style.display = 'block';
-                return;
-            }
-
-            if (file.size > 10 * 1024 * 1024) {
-                showUploadWarning("ไฟล์ใหญ่เกินไป", "กรุณาเลือกไฟล์ขนาดไม่เกิน 10MB");
-                return;
-            }
-
-            if (!file.type.startsWith("image/")) {
-                showUploadWarning("ไฟล์ไม่ถูกต้อง", "กรุณาเลือกไฟล์รูปภาพเท่านั้น");
-                return;
-            }
-
-            coverFile = file; // อัปเดตไฟล์ล่าสุด
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                previewImage.src = reader.result;
-                previewImage.style.display = 'block';
-                previewPlaceholder.style.display = 'none';
-                uploadPlaceholder.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-
-
-        uploadArea.addEventListener('click', (e) => {
-            if (e.target.closest('#removeImageBtn')) return;
-            coverImageInput.click();
-        });
+        uploadArea.addEventListener('click', () => coverImageInput.click());
 
         coverImageInput.addEventListener('change', (e) => {
-            handleFileChange(e.target.files?.[0] || null);
-        });
-
-        removeImageBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            coverImageInput.value = '';
-            handleFileChange(null);
-        });
-
-        uploadArea.addEventListener('mouseover', () => { if (coverFile) removeImageBtn.style.opacity = '1'; });
-        uploadArea.addEventListener('mouseout', () => { removeImageBtn.style.opacity = '0'; });
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, preventDefaults, false);
-        });
-        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-
-        uploadArea.addEventListener('dragenter', () => uploadArea.classList.add('drag-over'));
-        uploadArea.addEventListener('dragover', () => uploadArea.classList.add('drag-over'));
-        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
-        uploadArea.addEventListener('drop', () => uploadArea.classList.remove('drag-over'));
-        uploadArea.addEventListener('drop', (e) => {
-            const file = e.dataTransfer.files[0];
-            handleFileChange(file);
-        });
-
-        // --- 4. Success Modal ---
-        function showSuccessModal() {
-            successModalOverlay.style.display = 'flex';
-            modalIconWrapper.style.transform = 'scale(0)';
-            void modalIconWrapper.offsetWidth;
-            modalIconWrapper.style.animation = 'none';
-            void modalIconWrapper.offsetWidth;
-            modalIconWrapper.style.animation = 'spring-scale 0.5s 0.2s forwards';
-            setTimeout(() => { successModalOverlay.classList.remove('show'); }, 3000);
-            setTimeout(() => { successModalOverlay.classList.add('show'); }, 50);
-        }
-
-        successModalOverlay.addEventListener('click', (e) => {
-            if (e.target === successModalOverlay) {
-                successModalOverlay.classList.remove('show');
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไฟล์ใหญ่เกินไป',
+                        text: 'กรุณาเลือกไฟล์ขนาดไม่เกิน 10MB',
+                        confirmButtonColor: '#b91c1c'
+                    });
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    previewImage.src = reader.result;
+                    previewImage.style.display = "block"; // โชว์ภาพ
+                    document.getElementById("previewPlaceholder").style.display = "none"; // ซ่อน placeholder
+                };
+                reader.readAsDataURL(file);
             }
         });
+
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#c49a67';
+            uploadArea.style.backgroundColor = '#e9e4dc';
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#eee';
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#eee';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                coverImageInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                coverImageInput.dispatchEvent(event);
+            }
+        });
+
+        const registerForm = document.getElementById('registerForm');
 
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (countThaiWords(textarea.value) > 100) {
-                showUploadWarning(
-                    "ข้อมูลไม่ถูกต้อง",  // ข้อความหลักสีแดง
-                    "รายละเอียดเกิน 100 คำ" // ข้อความรายละเอียดสีเทา
-                );
+            if (!coverImageInput.files[0]) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณาอัปโหลดภาพปก',
+                    text: 'ต้องมีภาพปกก่อนยืนยันการลงทะเบียน',
+                    confirmButtonColor: '#c49a67'
+                });
                 return;
             }
 
-            if (!coverFile) {
-                showUploadWarning(
-                    "แจ้งเตือน", // ข้อความหลักสีแดง
-                    "กรุณาอัปโหลดภาพปกก่อน" // ข้อความรายละเอียดสีเทา
-                );
-                return;
-            }
-
-            showSuccessModal(); // สีทอง
+            Swal.fire({
+                icon: 'success',
+                title: 'ลงทะเบียนสำเร็จ!',
+                text: 'กำลังพาท่านไปที่หน้าแกลเลอรี...',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            }).then(() => {
+                window.location.href = 'gallery.html';
+            });
         });
-
-
     </script>
-
 </body>
 
 </html>
