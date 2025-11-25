@@ -6,6 +6,7 @@
     <title>Youth Content Gallery - แพลตฟอร์มแสดงผลงานวิดีโอเพื่อสังคม</title>
 
     <style>
+        /* (CSS ส่วนที่เหลือเหมือนเดิม) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -31,7 +32,9 @@
             font-size: 2rem;
             background: linear-gradient(135deg, #ef4444, #737373);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+            color: transparent;
         }
 
         /* Search */
@@ -120,7 +123,14 @@
         .btn-vote { background: #ef4444; color: white; }
         .btn-vote:hover { background: #dc2626; }
 
-        .empty-state { text-align: center; margin-top: 3rem; color: #6b7280; font-size: 1.25rem; }
+        .empty-state { 
+            text-align: center; 
+            margin-top: 3rem; 
+            color: #6b7280; 
+            font-size: 1.25rem;
+            /* 🚩 การแก้ไข: ซ่อนไว้ตั้งแต่แรก และจะแสดงด้วย JS เมื่อไม่มีผลงาน */
+            display: none; 
+        }
 
     </style>
 </head>
@@ -134,7 +144,6 @@
 
 <div class="container">
 
-    <!-- Search -->
     <div class="search-wrapper">
         <div class="search-box">
             <span class="search-icon">🔍</span>
@@ -148,7 +157,7 @@
 
     <div id="projectsGrid" class="projects-grid"></div>
 
-    <div id="emptyState" class="empty-state" style="display:none;">
+    <div id="emptyState" class="empty-state">
         ❌ ไม่มีผลงาน
     </div>
 
@@ -156,117 +165,17 @@
 
 <script>
 /* -----------------------
-   🎬 DATA (ตัวอย่าง)
+    🎬 DATA (การประกาศครั้งเดียว)
+    💡 การแก้ไข: หากคุณต้องการให้เริ่มต้นด้วย Grid ว่างเปล่า ให้ตั้ง projects = []
+    หากต้องการให้มีผลงานตัวอย่างเมื่อเริ่ม ให้ใช้ข้อมูลเดิม
 -------------------------*/
-let projects = [
+let projects = [ 
+    // หากต้องการ Empty State เมื่อโหลดครั้งแรก: ให้ Comment/ลบ ข้อมูลใน Array นี้ออก
+    /*
     {
         id: 1,
         title: "ป่าไม้ที่หายไป",
         theme: "สิ่งแวดล้อม (Planet)",
-        description: "ป่าไม้เป็นสิ่งที่อยู่คู่กับสังคมไทย...",
+        description: "ป่าไม้เป็นสิ่งที่อยู่คู่กับสังคมไทยมาอย่างช้านาน...",
         teamName: "ทีมป่าไม้ของฉัน",
-        tiktokLink: "https://www.tiktok.com/@example/video/123",
-        coverImage: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400",
-        views: 1250,
-        likes: 180
-    }
-];
-
-/* -----------------------
-   🎬 RENDER PROJECTS
--------------------------*/
-function renderProjects(list = projects) {
-    const grid = document.getElementById("projectsGrid");
-    const count = document.getElementById("projectCount");
-    const emptyState = document.getElementById("emptyState");
-
-    count.textContent = list.length;
-
-    if (list.length === 0) {
-        grid.innerHTML = "";
-        emptyState.style.display = "block";
-        return;
-    }
-
-    emptyState.style.display = "none";
-
-    grid.innerHTML = list
-        .map(p => `
-        <div class="project-card">
-            <div class="project-cover">
-                <img src="${p.coverImage}" alt="${p.title}">
-            </div>
-            <div class="project-content">
-                <h3 class="project-title">${p.title}</h3>
-                <span class="project-badge">${p.theme}</span>
-
-                <p class="project-description">${p.description}</p>
-                <p class="project-team">โดย ${p.teamName}</p>
-
-                <div class="project-stats">
-                    <div>👁️ ${p.views}</div>
-                    <div>❤️ ${p.likes}</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-watch" onclick="watchVideo('${p.tiktokLink}')">▶ ดูวิดีโอ</button>
-                    <button class="btn btn-vote" onclick="voteProject(${p.id})">❤️ โหวต</button>
-                </div>
-            </div>
-        </div>
-    `).join("");
-}
-
-/* -----------------------
-   🔍 FILTER
--------------------------*/
-function filterProjects() {
-    const q = document.getElementById("searchInput").value.toLowerCase();
-
-    const result = projects.filter(p =>
-        p.title.toLowerCase().includes(q) ||
-        p.theme.toLowerCase().includes(q) ||
-        p.teamName.toLowerCase().includes(q)
-    );
-
-    renderProjects(result);
-}
-
-/* -----------------------
-   ▶ WATCH VIDEO
--------------------------*/
-function watchVideo(url) {
-    window.open(url, "_blank");
-}
-
-/* -----------------------
-   ❤️ VOTE (1 คนโหวตได้ 1 คลิป)
--------------------------*/
-function voteProject(id) {
-
-    // ถ้าผู้ใช้เคยโหวตแล้ว ไม่ให้โหวตอีก
-    if (localStorage.getItem("voted_once")) {
-        alert("คุณใช้สิทธิ์โหวตไปแล้ว ไม่สามารถโหวตคลิปอื่นได้อีก");
-        return;
-    }
-
-    // หา project ที่ถูกโหวต
-    const p = projects.find(x => x.id === id);
-    if (!p) return;
-
-    // เพิ่มจำนวนโหวต
-    p.likes++;
-
-    // บันทึกว่าโหวตแล้ว
-    localStorage.setItem("voted_once", "true");
-
-    alert("ขอบคุณสำหรับการโหวต!");
-
-    // อัปเดตหน้าเว็บ
-    renderProjects(projects);
-}
-
-
-</script>
-</body>
-</html>
+        tiktokLink: "https://www.tiktok
