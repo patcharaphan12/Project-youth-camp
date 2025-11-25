@@ -20,7 +20,17 @@
         }
 
         body {
-            background: #f6f5f7;
+            background-image: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), url('mediaai.jpeg');
+            background-size: cover;
+            /* ขยายภาพให้เต็มจอเสมอ */
+            background-position: center;
+            /* จัดภาพให้อยู่ตรงกลาง */
+            background-repeat: no-repeat;
+            /* ไม่ให้ภาพซ้อนกัน */
+            background-attachment: fixed;
+            /* (Optional) ให้ภาพนิ่งเวลาเลื่อนเมาส์ */
+
+            /* ค่าเดิมที่คุณมีอยู่ */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,20 +67,20 @@
             margin: 15px 0;
             transition: color 0.3s;
         }
-        
+
         a:hover {
             color: #c49a67;
         }
 
         /* ปุ่มสไตล์เดียวกับหน้า Submission */
         button {
-            border-radius: 20px;
+            border-radius: 15px;
             border: 1px solid #c49a67;
             background-color: #c49a67;
             color: #FFFFFF;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
-            padding: 12px 45px;
+            padding: 6px 30px;
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: transform 80ms ease-in, background-color 0.3s;
@@ -81,19 +91,19 @@
         button:active {
             transform: scale(0.95);
         }
-        
+
         button:hover {
             background-color: #b38b5a;
         }
 
         button.ghost {
             background-color: transparent;
-            border-color: #FFFFFF;
+            border-color: #b38b5aab;
             box-shadow: none;
         }
-        
+
         button.ghost:hover {
-            background-color: rgba(255,255,255,0.2);
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         form {
@@ -102,21 +112,22 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            padding: 0 50px;
+            padding: 0 35px;
             height: 100%;
             text-align: center;
-            padding-top: 30px;
-            padding-bottom: 30px;
+            padding-top: 20px;
+            padding-bottom: 25px;
         }
 
         /* Input Style ให้เหมือนหน้า Submission */
         input {
             background-color: #eee;
             border: none;
-            padding: 12px 15px;
-            margin: 8px 0;
+            padding: 13px 12px;
+            margin: 1px;
             width: 100%;
-            border-radius: 8px; /* เพิ่มความมน */
+            border-radius: 8px;
+            /* เพิ่มความมน */
             font-size: 14px;
             transition: all 0.3s ease;
         }
@@ -125,18 +136,20 @@
         input:focus {
             outline: none;
             background-color: #e8e8e8;
-            box-shadow: 0 2px 0 #c49a67; /* เส้นใต้สีทอง */
+            box-shadow: 0 2px 0 #c49a67;
+            /* เส้นใต้สีทอง */
         }
 
         .container {
             background-color: #fff;
-            border-radius: 20px; /* ปรับให้มนเท่า Card หน้า Submission */
+            border-radius: 20px;
+            /* ปรับให้มนเท่า Card หน้า Submission */
             box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
             position: relative;
             overflow: hidden;
-            width: 768px;
-            max-width: 100%;
-            min-height: 620px;
+            width: 650px;
+            max-width: 90%;
+            min-height: 600px;
         }
 
         .form-container {
@@ -183,7 +196,7 @@
             transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
             opacity: 0;
             pointer-events: none;
-            padding: 0 50px;
+            padding: 0 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -213,7 +226,8 @@
         }
 
         .overlay {
-            background: #842339; /* ปรับพื้นหลังให้เข้าธีม (Dark Red) */
+            background: #842339;
+            /* ปรับพื้นหลังให้เข้าธีม (Dark Red) */
             background-repeat: no-repeat;
             background-size: cover;
             color: #FFFFFF;
@@ -269,14 +283,14 @@
             background-position: center center;
             color: #FFFFFF;
         }
-        
+
         .overlay-panel-custom h1 {
-             color: #FFFFFF;
-             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            color: #FFFFFF;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        
+
         .overlay-panel-custom p {
-             color: #eee;
+            color: #eee;
         }
 
         .overlay-panel-custom::before {
@@ -286,19 +300,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(133, 34, 57, 0.9); /* เพิ่มความเข้มเล็กน้อย */
+            background-color: rgba(133, 34, 57, 0.9);
+            /* เพิ่มความเข้มเล็กน้อย */
             z-index: -1;
         }
 
         .input-group-full {
             width: 100%;
-            margin-bottom: 15px; /* ปรับระยะห่าง */
+            margin-bottom: 15px;
+            /* ปรับระยะห่าง */
             text-align: center;
         }
 
         .name-group {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             width: 100%;
             margin-bottom: 15px;
         }
@@ -315,7 +331,6 @@
 
         .password-field input {
             padding-right: 40px;
-            margin: 8px 0;
         }
 
         /* ไอคอนตาแมว เปลี่ยนเป็นสีทอง */
@@ -327,10 +342,10 @@
             cursor: pointer;
             font-size: 1rem;
             z-index: 10;
-            color: #a4a4a4; 
+            color: #a4a4a4;
             transition: color 0.3s;
         }
-        
+
         .password-toggle:hover {
             color: #a4a4a4;
         }
@@ -345,23 +360,25 @@
             border: 1px solid #ddd;
             background-color: #fff;
         }
-        
+
         .otp-input:focus {
-             border-color: #c49a67;
-             box-shadow: 0 0 5px rgba(196, 154, 103, 0.4);
+            border-color: #c49a67;
+            box-shadow: 0 0 5px rgba(196, 154, 103, 0.4);
         }
 
         /* Validation Styling - ใช้สีแดงเลือดหมู #b91c1c ให้เหมือนธีมหลัก */
         .form-container input.is-invalid {
             border: 1px solid #b91c1c !important;
-            box-shadow: none; /* ลบเงา Focus สีทองออกตอนผิด */
+            box-shadow: none;
+            /* ลบเงา Focus สีทองออกตอนผิด */
         }
 
         .validation-error {
             display: none;
             font-size: 11px;
             font-weight: 600;
-            color: #b91c1c; /* สีแดงเข้ม */
+            color: #b91c1c;
+            /* สีแดงเข้ม */
             margin-top: 2px;
             margin-bottom: 0px;
             text-align: left;
@@ -376,7 +393,7 @@
 
         <div class="form-container sign-up-container">
             <form action="#" class="registration-form" id="signUpForm" novalidate>
-                <h1>สร้างบัญชี</h1>            
+                <h1>สร้างบัญชี</h1>
                 <div class="input-group-full">
                     <input type="text" id="su-username" placeholder="ชื่อผู้ใช้" required minlength="3" />
                     <span class="validation-error">กรุณากรอกชื่อผู้ใช้</span>

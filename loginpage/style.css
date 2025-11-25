@@ -60,7 +60,7 @@ button {
     border: 1px solid #c49a67;
     background-color: #c49a67;
     color: #FFFFFF;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     padding: 12px 45px;
     letter-spacing: 1px;
@@ -100,12 +100,12 @@ form {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 50px;
+    padding: 0 40px;
     height: 100%;
     text-align: center;
     /* FIX: เพิ่ม Padding บน/ล่าง และล้าง gap/margin ที่ขัดแย้ง */
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     /* 🚩 FIX: ใส่ตัวเลขให้ gap หรือลบออกถ้าไม่ใช้ */
     gap: 10px; 
 }
@@ -304,7 +304,7 @@ input:focus {
 
 .input-group-full {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 15px; //*18
     text-align: center;
 }
 
@@ -329,7 +329,6 @@ input:focus {
 
 .password-field input {
     padding-right: 40px;
-    margin: 5px 0;
 }
 
 .password-toggle {
