@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - Youth Camp</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* 3. Global Styles (Design System) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Kanit', sans-serif;
+        }
+
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('mediaai01.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+            color: #666;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #c49a67;
+        }
+
+        /* Button Style */
+        button {
+            border-radius: 30px;
+            border: 1px solid #c49a67;
+            background-color: #c49a67;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in, background-color 0.3s;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(196, 154, 103, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:hover {
+            background-color: #b38b5a;
+        }
+
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+            box-shadow: none;
+        }
+
+        button.ghost:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Form & Inputs */
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            background-color: #e8e8e8;
+            box-shadow: 0 2px 0 #c49a67;
+        }
+
+        /* Main Container */
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+                0 10px 10px rgba(0, 0, 0, 0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 600px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
+        }
+
+        .sub-form {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 0 50px;
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sub-form.active {
+            opacity: 1;
+            pointer-events: auto;
+            position: relative;
+        }
+
+        /* Overlay */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: #991B1B;
+            background: -webkit-linear-gradient(to right, #991B1B, #7F1D1D);
+            background: linear-gradient(to right, #991b1b, #991b1b) background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left { transform: translateX(-20%); }
+        .container.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .container.right-panel-active .overlay-right { transform: translateX(20%); }
+
+        .overlay-panel-custom {
+            background-color: #991B1B;
+            background-image: url('Thai pattern.png');
+            background-repeat: repeat;
+            background-size: 120px;
+            background-position: center;
+        }
+
+        .overlay-panel-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(153, 27, 27, 0.9);
+            z-index: -1;
+        }
+
+        .overlay-panel-custom h1,
+        .overlay-panel-custom p {
+            z-index: 1;
+            color: #FFFFFF !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Input Groups */
+        .input-group-full { width: 100%; margin-bottom: 10px; text-align: left; }
+        .name-group { display: flex; gap: 10px; width: 100%; margin-bottom: 10px; }
+        .name-group .input-group-half { flex: 1; }
+
+        /* Password Toggle */
+        .password-field { position: relative; width: 100%; }
+        .password-field input { padding-right: 40px; margin: 8px 0; }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9c9c9c;
+            z-index: 10;
+            transition: color 0.3s;
+        }
+        .password-toggle:hover { color: #b38b5a; }
+
+        /* --- แก้ไข OTP CSS (สำคัญมาก: ป้องกันช่องหาย) --- */
+        .otp-input {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            font-size: 18px;
+            margin: 0 2px;
+            border-radius: 8px;
+            
+            /* ใช้สีเทา #eee ให้เห็นชัดบนพื้นขาว */
+            background-color: #eee !important;
+            border: 1px solid #ccc !important;
+            
+            /* ล้างค่า padding และกำหนดสีตัวอักษร */
+            color: #333 !important;
+            padding: 0 !important;
+            line-height: 45px;
+        }
+        
+        .otp-input:focus {
+            background-color: #fff !important;
+            border-color: #c49a67 !important;
+            box-shadow: 0 0 5px rgba(196, 154, 103, 0.4);
+            outline: none;
+            color: #000 !important;
+        }
+
+        /* Validation Error */
+        .form-container input.is-invalid {
+            border: 1px solid #991B1B !important;
+            box-shadow: none;
+        }
+
+        .validation-error {
+            display: none;
+            font-size: 11px;
+            font-weight: 600;
+            color: #991B1B;
+            margin-top: 4px;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#" class="registration-form" id="signUpForm" novalidate>
+                <h1>สร้างบัญชี</h1>
+                <div class="input-group-full"><input type="text" id="su-username" placeholder="ชื่อผู้ใช้" required minlength="3" /><span class="validation-error">กรุณากรอกชื่อผู้ใช้</span></div>
+                <div class="name-group">
+                    <div class="input-group-half"><input type="text" id="su-firstname" placeholder="ชื่อจริง" required /><span class="validation-error">กรุณากรอกชื่อจริง</span></div>
+                    <div class="input-group-half"><input type="text" id="su-lastname" placeholder="นามสกุล" required /><span class="validation-error">กรุณากรอกนามสกุล</span></div>
+                </div>
+                <div class="input-group-full"><input type="email" id="su-email" placeholder="อีเมล" required /><span class="validation-error">รูปแบบอีเมลไม่ถูกต้อง</span></div>
+                <div class="input-group-full"><input type="tel" id="su-phone" placeholder="เบอร์โทรศัพท์" required pattern="[0-9]{10}" /><span class="validation-error">เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก</span></div>
+                <div class="input-group-full"><div class="password-field"><input type="password" id="su-password" required minlength="8" placeholder="รหัสผ่าน" /><i class="far fa-eye password-toggle"></i></div><span class="validation-error">รหัสผ่านต้องมีอย่างน้อย 8 ตัว</span></div>
+                <div class="input-group-full"><div class="password-field"><input type="password" id="su-confirm-password" required minlength="8" placeholder="ยืนยันรหัสผ่าน" /><i class="far fa-eye password-toggle"></i></div><span class="validation-error">รหัสผ่านไม่ตรงกัน</span></div>
+                <button type="submit" style="margin-top: 10px;">ลงทะเบียน</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-in-container">
+            <form action="#" class="sub-form active" id="signInForm">
+                <h1>เข้าสู่ระบบ</h1>
+                <div class="input-group-full"><input type="email" id="si-email" placeholder="อีเมล" required /><span class="validation-error">รูปแบบอีเมลไม่ถูกต้อง</span></div>
+                <div class="input-group-full"><div class="password-field"><input type="password" id="si-password" placeholder="รหัสผ่าน" required /><i class="far fa-eye password-toggle"></i></div><span class="validation-error">กรุณากรอกรหัสผ่าน</span></div>
+                <a href="#" id="forgotPasswordLink">ลืมรหัสผ่าน?</a>
+                <button type="submit">เข้าสู่ระบบ</button>
+            </form>
+
+            <form action="#" class="sub-form" id="forgotEmailForm">
+                <h1>ลืมรหัสผ่าน</h1>
+                <p>กรุณากรอกอีเมลที่ลงทะเบียนไว้เพื่อรับรหัส OTP</p>
+                <div class="input-group-full"><input type="email" id="fp-email" placeholder="อีเมล" required /><span class="validation-error">รูปแบบอีเมลไม่ถูกต้อง</span></div>
+                <button type="submit" id="sendOtpButton">ส่งรหัสยืนยัน</button>
+                <a href="#" id="backToSignIn">กลับสู่หน้าเข้าสู่ระบบ</a>
+            </form>
+
+            <form action="#" class="sub-form" id="otpForm">
+                <h1>ยืนยัน OTP</h1>
+                <p>รหัส OTP ถูกส่งไปที่ <span id="otp-email-display" style="font-weight: bold; color: #b91c1c;"></span></p>
+                <div class="input-group-full" style="display: flex; justify-content: center; gap: 5px;">
+                    <input type="text" maxlength="1" class="otp-input" id="otp-1" required>
+                    <input type="text" maxlength="1" class="otp-input" id="otp-2" required>
+                    <input type="text" maxlength="1" class="otp-input" id="otp-3" required>
+                    <input type="text" maxlength="1" class="otp-input" id="otp-4" required>
+                    <input type="text" maxlength="1" class="otp-input" id="otp-5" required>
+                    <input type="text" maxlength="1" class="otp-input" id="otp-6" required>
+                </div>
+                <span class="validation-error" style="display: block; margin-top: 10px;">กรุณากรอกรหัสให้ครบ 6 หลัก</span>
+                <button type="submit" id="verifyOtpButton" style="margin-top: 20px;">ยืนยัน</button>
+                <a href="#" id="resendOtp" style="margin-top: 10px;">ส่งรหัสอีกครั้ง</a>
+                <a href="#" id="backToForgotEmail" style="margin-top: 5px;">กลับไปแก้ไขอีเมล</a>
+            </form>
+
+            <form action="#" class="sub-form" id="resetPasswordForm">
+                <h1>ตั้งรหัสผ่านใหม่</h1>
+                <p>กรุณาตั้งรหัสผ่านใหม่สำหรับบัญชีของคุณ</p>
+                <div class="input-group-full"><div class="password-field"><input type="password" id="rp-password" required minlength="8" placeholder="รหัสผ่านใหม่" /><i class="far fa-eye password-toggle"></i></div><span class="validation-error">รหัสผ่านต้องมีอย่างน้อย 8 ตัว</span></div>
+                <div class="input-group-full"><div class="password-field"><input type="password" id="rp-confirm-password" required minlength="8" placeholder="ยืนยันรหัสผ่านใหม่" /><i class="far fa-eye password-toggle"></i></div><span class="validation-error">รหัสผ่านไม่ตรงกัน</span></div>
+                <button type="submit">เปลี่ยนรหัสผ่าน</button>
+                <a href="#" id="backToSignInFromReset">กลับสู่หน้าเข้าสู่ระบบ</a>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left overlay-panel-custom">
+                    <h1>ยินดีต้อนรับ</h1>
+                    <p>หากท่านมีบัญชีอยู่แล้ว สามารถเข้าสู่ระบบได้ทันที</p>
+                    <button class="ghost" id="signIn">เข้าสู่ระบบ</button>
+                </div>
+                <div class="overlay-panel overlay-right overlay-panel-custom">
+                    <h1>สวัสดี!</h1>
+                    <p>มาร่วมเป็นส่วนหนึ่งกับเรา ลงทะเบียนเลย</p>
+                    <button class="ghost" id="signUp">ลงทะเบียน</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // UI & Panel Switching
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+        const subForms = document.querySelectorAll('.sign-in-container .sub-form');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const backToSignIn = document.getElementById('backToSignIn');
+        const backToForgotEmail = document.getElementById('backToForgotEmail');
+        const backToSignInFromReset = document.getElementById('backToSignInFromReset');
+
+        signUpButton.addEventListener('click', () => { container.classList.add("right-panel-active"); });
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+            showSubForm('signInForm');
+        });
+
+        function showSubForm(formId) {
+            subForms.forEach(form => { form.classList.remove('active'); });
+            document.getElementById(formId).classList.add('active');
+            document.querySelectorAll('.sign-in-container .validation-error').forEach(err => err.style.display = 'none');
+            document.querySelectorAll('.sign-in-container input').forEach(input => input.classList.remove('is-invalid'));
+        }
+
+        forgotPasswordLink.addEventListener('click', (e) => { e.preventDefault(); showSubForm('forgotEmailForm'); });
+        backToSignIn.addEventListener('click', (e) => { e.preventDefault(); showSubForm('signInForm'); });
+        backToForgotEmail.addEventListener('click', (e) => { e.preventDefault(); showSubForm('forgotEmailForm'); });
+        backToSignInFromReset.addEventListener('click', (e) => { e.preventDefault(); showSubForm('signInForm'); });
+
+        // Password Toggle
+        const togglePassword = document.querySelectorAll('.password-toggle');
+        togglePassword.forEach(icon => {
+            icon.addEventListener('click', () => {
+                const passwordInput = icon.previousElementSibling;
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = "password";
+                    icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye');
+                }
+            });
+        });
+
+        // Validation Helpers
+        function getErrorElement(input) {
+            const parentGroup = input.closest('.input-group-full, .input-group-half, .password-field').closest('.input-group-full, .input-group-half');
+            return parentGroup ? parentGroup.querySelector('.validation-error') : input.nextElementSibling;
+        }
+
+        function validateField(input) {
+            const errorElement = getErrorElement(input);
+            let isFieldValid = true; let errorMessage = '';
+            if (input.validity.valueMissing) { isFieldValid = false; errorMessage = 'กรุณากรอกข้อมูล'; }
+            else if (input.id === 'su-username' && input.validity.tooShort) { isFieldValid = false; errorMessage = 'ชื่อผู้ใช้ต้องมีอย่างน้อย 3 ตัว'; }
+            else if (input.id === 'su-phone' && input.validity.patternMismatch) { isFieldValid = false; errorMessage = 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก'; }
+            else if ((input.id === 'su-password' || input.id === 'rp-password') && input.validity.tooShort) { isFieldValid = false; errorMessage = 'รหัสผ่านต้องมีอย่างน้อย 8 ตัว'; }
+            else if ((input.id.includes('email')) && input.validity.typeMismatch) { isFieldValid = false; errorMessage = 'รูปแบบอีเมลไม่ถูกต้อง'; }
+            
+            if (input.id === 'su-confirm-password') {
+                if (input.value !== document.getElementById('su-password').value) { errorMessage = 'รหัสผ่านไม่ตรงกัน'; isFieldValid = false; }
+            }
+            if (input.id === 'rp-confirm-password') {
+                if (input.value !== document.getElementById('rp-password').value) { errorMessage = 'รหัสผ่านใหม่ไม่ตรงกัน'; isFieldValid = false; }
+            }
+
+            if (isFieldValid) { input.classList.remove('is-invalid'); errorElement.style.display = 'none'; }
+            else if (input.value.length > 0 || input.validity.valueMissing) {
+                input.classList.add('is-invalid'); errorElement.textContent = errorMessage || errorElement.textContent; errorElement.style.display = 'block';
+            }
+            return isFieldValid;
+        }
+
+        const allFormInputs = document.querySelectorAll('input');
+        allFormInputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.remove('is-invalid');
+                const errorElement = getErrorElement(input); if (errorElement) errorElement.style.display = 'none';
+            });
+            input.addEventListener('blur', () => { if (!input.classList.contains('otp-input')) validateField(input); });
+        });
+
+        // OTP Logic
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (input.value.length === 1 && index < otpInputs.length - 1) otpInputs[index + 1].focus();
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value.length === 0 && index > 0) otpInputs[index - 1].focus();
+            });
+        });
+
+        // ** Resend OTP Function **
+        document.getElementById('resendOtp').addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('fp-email').value;
+            Swal.fire({
+                icon: 'info',
+                title: 'ส่ง OTP อีกครั้ง',
+                text: `รหัส OTP ใหม่ถูกส่งไปที่ ${email} (รหัสทดสอบ: 123456)`,
+                confirmButtonColor: '#c49a67'
+            });
+            otpInputs.forEach(input => input.value = '');
+            otpInputs[0].focus();
+        });
+
+        // *** Submit Handlers with SweetAlert2 ***
+
+        // 1. Sign Up
+        const signUpForm = document.getElementById('signUpForm');
+        signUpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let formValid = true;
+            const signUpInputs = signUpForm.querySelectorAll('input');
+            signUpInputs.forEach(input => { if (!validateField(input)) formValid = false; });
+
+            if (!formValid) {
+                const firstInvalid = signUpForm.querySelector('.is-invalid'); if (firstInvalid) firstInvalid.focus();
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'ลงทะเบียนสำเร็จ',
+                    text: 'กรุณาเข้าสู่ระบบ',
+                    confirmButtonColor: '#c49a67'
+                }).then(() => {
+                    container.classList.remove("right-panel-active");
+                    signUpForm.reset();
+                });
+            }
+        });
+
+        // 2. Forgot Email
+        const forgotEmailForm = document.getElementById('forgotEmailForm');
+        forgotEmailForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('fp-email');
+            if (validateField(emailInput)) {
+                const userEmail = emailInput.value;
+                document.getElementById('otp-email-display').textContent = userEmail;
+                Swal.fire({
+                    icon: 'info',
+                    title: 'ส่ง OTP แล้ว',
+                    text: `รหัส OTP ถูกส่งไปที่ ${userEmail} (รหัสทดสอบ: 123456)`,
+                    confirmButtonColor: '#c49a67'
+                }).then(() => {
+                    otpInputs.forEach(input => input.value = '');
+                    showSubForm('otpForm');
+                });
+            }
+        });
+
+        // 3. OTP Verify
+        const otpForm = document.getElementById('otpForm');
+        otpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const otpValue = Array.from(otpInputs).map(input => input.value).join('');
+            const otpErrorElement = document.querySelector('#otpForm .validation-error');
+
+            if (otpValue.length !== 6) {
+                otpErrorElement.textContent = 'กรุณากรอกรหัส OTP 6 หลัก';
+                otpErrorElement.style.display = 'block';
+                otpInputs[0].focus();
+                return;
+            }
+            otpErrorElement.style.display = 'none';
+
+            if (otpValue === '123456') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'OTP ถูกต้อง',
+                    text: 'กรุณาตั้งรหัสผ่านใหม่',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    showSubForm('resetPasswordForm');
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'รหัส OTP ไม่ถูกต้อง',
+                    text: 'กรุณาลองใหม่อีกครั้ง',
+                    confirmButtonColor: '#991B1B'
+                });
+                otpInputs.forEach(input => input.value = '');
+                otpInputs[0].focus();
+            }
+        });
+
+        // 4. Reset Password
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        resetPasswordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const rpPassword = document.getElementById('rp-password');
+            const rpConfirmPassword = document.getElementById('rp-confirm-password');
+            let formValid = true;
+            if (!validateField(rpPassword)) formValid = false;
+            if (!validateField(rpConfirmPassword)) formValid = false;
+
+            if (formValid) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'เปลี่ยนรหัสผ่านสำเร็จ',
+                    text: 'กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่',
+                    confirmButtonColor: '#c49a67'
+                }).then(() => {
+                    showSubForm('signInForm');
+                });
+            } else {
+                const firstInvalid = resetPasswordForm.querySelector('.is-invalid'); if (firstInvalid) firstInvalid.focus();
+            }
+        });
+
+        // 5. Sign In
+        const signInForm = document.getElementById('signInForm');
+        signInForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const siEmail = document.getElementById('si-email');
+            const siPassword = document.getElementById('si-password');
+            let formValid = true;
+            if (!validateField(siEmail)) formValid = false;
+            if (!validateField(siPassword)) formValid = false;
+
+            if (formValid) {
+                const isAuth = siEmail.value === 'test@test.com' && siPassword.value === '12345678';
+                if (isAuth) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'เข้าสู่ระบบสำเร็จ',
+                        text: 'กำลังพาท่านไปหน้าถัดไป...',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        timerProgressBar: true
+                    }).then(() => {
+                        window.location.href = 'submission.html';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เข้าสู่ระบบไม่สำเร็จ',
+                        text: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+                        confirmButtonColor: '#991B1B'
+                    });
+                    siPassword.classList.add('is-invalid');
+                }
+            } else {
+                const firstInvalid = signInForm.querySelector('.is-invalid'); if (firstInvalid) firstInvalid.focus();
+            }
+        });
+    </script>
+</body>
+</html>

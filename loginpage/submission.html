@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียนผลงาน - Youth Camp</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* 3. Global Styles (เหมือนหน้า Login เป๊ะ) */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Kanit', sans-serif;
+        }
+
+        body {
+            background: #f6f5f7; /* พื้นหลังสีเทาอ่อน */
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-weight: bold;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            font-weight: 100;
+            letter-spacing: 0.5px;
+            color: #666;
+        }
+
+        /* Container & Card (เหมือนหน้า Login) */
+        .main-container {
+            width: 100%;
+            max-width: 900px; /* กว้างกว่า Login หน่อยเพราะเนื้อหาเยอะ */
+            background: #FFFFFF;
+            border-radius: 20px; /* ความโค้ง 20px */
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22); /* เงาเดียวกัน */
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* --- Form Elements (Input เหมือนหน้า Login) --- */
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            text-align: left;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background-color: #eee; /* สีพื้น Input แบบเดียวกับ Login */
+            border: none; /* ไม่มีขอบ */
+            padding: 12px 15px;
+            margin: 5px 0;
+            width: 100%;
+            font-size: 14px;
+            border-radius: 8px; /* ความมน */
+            transition: all 0.3s ease;
+        }
+
+        /* Focus State: เส้นใต้สีทอง */
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background-color: #e8e8e8;
+            box-shadow: 0 2px 0 #c49a67; 
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Layout Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1.5fr 1fr; /* แบ่งซ้ายขวา */
+            }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Word Count */
+        .word-count {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .word-count span {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            background-color: #eee;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #c49a67;
+            background-color: #e9e4dc;
+        }
+
+        .upload-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+            color: #c49a67;
+        }
+
+        .upload-text {
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Submit Button (เหมือนหน้า Login เป๊ะ) */
+        .submit-btn {
+            border-radius: 20px;
+            border: 1px solid #c49a67;
+            background-color: #c49a67;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(196, 154, 103, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .submit-btn:hover {
+            background-color: #b38b5a;
+        }
+
+        /* Preview Card */
+        .preview-card-wrapper {
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            /* ทำให้ดูกลืนไปกับ container หลัก หรือจะแยกก็ได้ */
+        }
+
+        .preview-container {
+            width: 100%;
+            max-width: 250px;
+            aspect-ratio: 9/16;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="page-header">
+        <h1>ลงทะเบียนผลงาน</h1>
+        <p>กรอกรายละเอียดเพื่อส่งผลงานเข้าร่วม Project Youth Camp</p>
+    </div>
+
+    <div class="main-container">
+        <div class="content-grid">
+            
+            <div>
+                <h2>รายละเอียดการส่ง</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="videoTitle">ชื่อวิดีโอ</label>
+                        <input type="text" id="videoTitle" name="videoTitle" placeholder="เช่น ป่าไม้ที่หายไป" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="theme">ธีมหัวข้อ</label>
+                        <input type="text" id="theme" name="theme" placeholder="เช่น สิ่งแวดล้อม (Planet)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="word-count">
+                            <label for="description">รายละเอียด (Synopsis)</label>
+                            <span id="wordCount">0/100 คำ</span>
+                        </div>
+                        <textarea id="description" name="description"
+                            placeholder="อธิบายเกี่ยวกับวิดีโอของคุณสั้นๆ ไม่เกิน 100 คำ..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="teamName">ชื่อทีมผู้จัดทำ</label>
+                            <input type="text" id="teamName" name="teamName" placeholder="ชื่อทีมของคุณ" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tiktokLink">ลิงก์ TikTok</label>
+                            <input type="url" id="tiktokLink" name="tiktokLink"
+                                placeholder="https://www.tiktok.com/@..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ภาพปกผลงาน (Cover)</label>
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="coverImage" name="coverImage" accept="image/*" style="display: none;">
+                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="upload-text">คลิกเพื่ออัปโหลด</p>
+                            <p class="upload-hint">ขนาดแนะนำ 1080x1920 px (ไม่เกิน 10MB)</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">ยืนยันการลงทะเบียน</button>
+                </form>
+            </div>
+
+            <div class="preview-card-wrapper">
+                <h2>ตัวอย่างรูปปก</h2>
+                <div class="preview-container">
+                    <img id="previewImage" src="https://via.placeholder.com/300x533/eee/c49a67?text=Preview" alt="Preview">
+                </div>
+                <p style="margin-top: 20px; font-size: 12px; color: #888; text-align: center;">ตัวอย่างการแสดงผลเมื่ออยู่บนแพลตฟอร์ม</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ------------------------------------------
+        // 1. Logic Word Count
+        // ------------------------------------------
+        const textarea = document.getElementById("description");
+        const wordCountDisplay = document.getElementById("wordCount");
+        let segmenter;
+        try { segmenter = new Intl.Segmenter("th", { granularity: "word" }); } catch (e) { segmenter = null; }
+
+        function countThaiWords(text) {
+            if (segmenter) {
+                const segments = [...segmenter.segment(text)].filter(seg => seg.isWordLike);
+                return segments.length;
+            } else {
+                return text.trim().split(/\s+/).length;
+            }
+        }
+
+        textarea.addEventListener("input", () => {
+            let text = textarea.value;
+            let words = countThaiWords(text);
+            wordCountDisplay.textContent = `${words}/100 คำ`;
+            if (words > 100) wordCountDisplay.style.color = "#b91c1c";
+            else wordCountDisplay.style.color = "#888";
+        });
+
+        // ------------------------------------------
+        // 2. Logic Image Upload
+        // ------------------------------------------
+        const coverImageInput = document.getElementById('coverImage');
+        const uploadArea = document.getElementById('uploadArea');
+        const previewImage = document.getElementById('previewImage');
+
+        uploadArea.addEventListener('click', () => coverImageInput.click());
+
+        coverImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไฟล์ใหญ่เกินไป',
+                        text: 'กรุณาเลือกไฟล์ขนาดไม่เกิน 10MB',
+                        confirmButtonColor: '#b91c1c'
+                    });
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = () => previewImage.src = reader.result;
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#c49a67';
+            uploadArea.style.backgroundColor = '#e9e4dc';
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#eee';
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#eee';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                coverImageInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                coverImageInput.dispatchEvent(event);
+            }
+        });
+
+        const registerForm = document.getElementById('registerForm');
+        
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!coverImageInput.files[0]) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณาอัปโหลดภาพปก',
+                    text: 'ต้องมีภาพปกก่อนยืนยันการลงทะเบียน',
+                    confirmButtonColor: '#c49a67'
+                });
+                return;
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: 'ลงทะเบียนสำเร็จ!',
+                text: 'กำลังพาท่านไปที่หน้าแกลเลอรี...',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true
+            }).then(() => {
+                window.location.href = 'gallery.html'; 
+            });
+        });
+    </script>
+</body>
+</html>

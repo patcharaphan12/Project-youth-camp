@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Content Gallery - แพลตฟอร์มแสดงผลงานวิดีโอเพื่อสังคม</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* 3. Global Styles (Theme เดียวกับ Login) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Kanit', sans-serif;
+        }
+
+        body {
+            background: #f6f5f7; /* พื้นหลังสีเทาอ่อน */
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Search Box Styling */
+        .search-wrapper {
+            max-width: 600px;
+            margin: 3rem auto 2rem;
+            position: relative;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: none;
+            border-radius: 30px; /* ทรงแคปซูล */
+            font-size: 1rem;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            /* เงาสีทอง */
+            box-shadow: 0 5px 20px rgba(196, 154, 103, 0.3); 
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #c49a67; /* ไอคอนสีทอง */
+            font-size: 1.1rem;
+        }
+
+        /* Grid Layout */
+        .projects-count {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        /* Card Design */
+        .project-card {
+            background: white;
+            border-radius: 20px; /* โค้งมนเท่ากับหน้า Login */
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            /* เงาสีทองตอน Hover */
+            box-shadow: 0 15px 30px rgba(196, 154, 103, 0.2); 
+        }
+
+        .project-cover {
+            position: relative;
+            aspect-ratio: 9/16; /* สัดส่วน Tiktok */
+            overflow: hidden;
+            background: #eee;
+        }
+
+        .project-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-cover img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-header {
+            margin-bottom: 0.5rem;
+        }
+
+        .project-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #c49a6720; /* ทองจางๆ */
+            color: #c49a67; /* ทองเข้ม */
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .project-team {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .project-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* ตัดคำที่บรรทัดที่ 3 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        /* Stats & Buttons */
+        .project-footer {
+            margin-top: auto;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .project-stats i {
+            margin-right: 5px;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* ปุ่ม Watch (Secondary - สีทอง) */
+        .btn-watch {
+            background: #fff;
+            border: 1px solid #c49a67;
+            color: #c49a67;
+        }
+        .btn-watch:hover {
+            background: #c49a67;
+            color: #fff;
+        }
+
+        /* ปุ่ม Vote (Primary - สีแดงเลือดหมู) */
+        .btn-vote {
+            background: #b91c1c;
+            color: white;
+            box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);
+        }
+        .btn-vote:hover {
+            background: #991b1b;
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            margin-top: 4rem;
+            color: #888;
+            display: none; /* ซ่อนไว้ก่อน */
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Youth Content Gallery</h1>
+            <p class="subtitle">พื้นที่ปล่อยของ สร้างสรรค์สังคม ของคนรุ่นใหม่</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="search-wrapper">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="ค้นหาชื่อทีม, ชื่อผลงาน หรือหัวข้อ..." oninput="filterProjects()">
+            </div>
+        </div>
+
+        <div class="projects-count">
+            แสดงผลงานทั้งหมด (<span id="projectCount">0</span>)
+        </div>
+
+        <div id="projectsGrid" class="projects-grid">
+            </div>
+
+        <div id="emptyState" class="empty-state">
+            <i class="far fa-folder-open"></i>
+            <h3>ไม่พบข้อมูลผลงาน</h3>
+            <p>ลองค้นหาด้วยคำสำคัญอื่น หรือตรวจสอบตัวสะกดอีกครั้ง</p>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Mock Data
+        const projectsData = [
+            {
+                id: 1,
+                title: "ป่าไม้ที่หายไป (The Lost Forest)",
+                team: "Green Gen Z",
+                theme: "สิ่งแวดล้อม (Planet)",
+                description: "สารคดีสั้นสะท้อนปัญหาการตัดไม้ทำลายป่าในพื้นที่ภาคเหนือ และแนวทางการฟื้นฟูอย่างยั่งยืนโดยชุมชน",
+                image: "https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                views: 1250,
+                votes: 342
+            },
+            {
+                id: 2,
+                title: "Stop Cyberbullying: หยุดทำร้ายผ่านจอ",
+                team: "Digital Hero",
+                theme: "สังคม (People)",
+                description: "หนังสั้นที่ตีแผ่เรื่องราวของเด็กวัยรุ่นที่ต้องเผชิญกับการกลั่นแกล้งบนโลกออนไลน์ และวิธีรับมือ",
+                image: "https://images.unsplash.com/photo-1555421689-d68471e189f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                views: 980,
+                votes: 215
+            },
+            {
+                id: 3,
+                title: "Local Food, Global Taste",
+                team: "Aroi Mak",
+                theme: "วัฒนธรรม (Culture)",
+                description: "การเดินทางของอาหารไทยจากครัวยายสู่สายตาชาวโลก ผ่านมุมมองการถ่ายทำที่ทันสมัยและน่าตื่นตาตื่นใจ",
+                image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                views: 3400,
+                votes: 890
+            },
+            {
+                id: 4,
+                title: "Waste to Wealth: ขยะสร้างค่า",
+                team: "Recycle Rangers",
+                theme: "นวัตกรรม (Innovation)",
+                description: "ไอเดียสุดเจ๋งในการเปลี่ยนขยะพลาสติกให้กลายเป็นผลิตภัณฑ์แฟชั่นที่ใช้งานได้จริง",
+                image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                views: 560,
+                votes: 120
+            },
+            {
+                id: 5,
+                title: "เสียงที่ไม่ได้ยิน (Unheard Voice)",
+                team: "Social Listeners",
+                theme: "ความเท่าเทียม (Equality)",
+                description: "บทสัมภาษณ์กลุ่มผู้เปราะบางทางสังคม ที่จะทำให้คุณเข้าใจมุมมองชีวิตที่แตกต่าง",
+                image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                views: 890,
+                votes: 156
+            }
+        ];
+
+        // 2. Variables
+        const projectsGrid = document.getElementById('projectsGrid');
+        const projectCountSpan = document.getElementById('projectCount');
+        const emptyState = document.getElementById('emptyState');
+
+        // 3. Function Render Cards
+        function renderProjects(projects) {
+            projectsGrid.innerHTML = ''; // Clear old content
+            projectCountSpan.textContent = projects.length; // Update count
+
+            if (projects.length === 0) {
+                projectsGrid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            projectsGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-cover">
+                        <img src="${project.image}" alt="${project.title}">
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-badge">${project.theme}</span>
+                            <h3 class="project-title">${project.title}</h3>
+                            <div class="project-team">
+                                <i class="fas fa-users"></i> ${project.team}
+                            </div>
+                        </div>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-footer">
+                            <div class="project-stats">
+                                <span><i class="far fa-eye"></i> ${project.views.toLocaleString()}</span>
+                                <span><i class="fas fa-heart" style="color:#b91c1c;"></i> ${project.votes.toLocaleString()}</span>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-watch" onclick="watchVideo('${project.title}')">
+                                    <i class="fas fa-play"></i> รับชม
+                                </button>
+                                <button class="btn btn-vote" onclick="voteProject(${project.id}, '${project.team}')">
+                                    <i class="fas fa-vote-yea"></i> โหวต
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                projectsGrid.appendChild(card);
+            });
+        }
+
+        // 4. Function Filter/Search
+        function filterProjects() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = projectsData.filter(project => {
+                return project.title.toLowerCase().includes(searchText) ||
+                       project.team.toLowerCase().includes(searchText) ||
+                       project.theme.toLowerCase().includes(searchText);
+            });
+
+            renderProjects(filtered);
+        }
+
+        // 5. Function Vote Simulation (SweetAlert2)
+        function voteProject(id, teamName) {
+            Swal.fire({
+                title: 'ยืนยันการโหวต?',
+                text: `คุณต้องการโหวตให้ทีม "${teamName}" ใช่หรือไม่`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#b91c1c', // แดง
+                cancelButtonColor: '#999',
+                confirmButtonText: 'ใช่, โหวตเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // หา Project แล้วเพิ่มคะแนน
+                    const project = projectsData.find(p => p.id === id);
+                    if(project) {
+                        project.votes++;
+                        filterProjects(); // Re-render
+                        
+                        Swal.fire({
+                            title: 'โหวตสำเร็จ!',
+                            text: 'ขอบคุณที่ร่วมเป็นส่วนหนึ่งในการตัดสิน',
+                            icon: 'success',
+                            confirmButtonColor: '#c49a67' // ทอง
+                        });
+                    }
+                }
+            });
+        }
+
+        // 6. Function Watch Video (SweetAlert2)
+        function watchVideo(title) {
+            Swal.fire({
+                title: `กำลังเปิดวิดีโอ: ${title}`,
+                html: '<p>จำลองการเล่นวิดีโอ...</p>',
+                icon: 'info',
+                confirmButtonColor: '#c49a67'
+            });
+        }
+
+        // Initialize (Start)
+        renderProjects(projectsData);
+
+    </script>
+</body>
+</html>
